@@ -1,0 +1,80 @@
+Created By: Sumit 													
+													
+DBA Survival Sheet 													
+Type Of Backup			SQL Command			Description							
+Cold Backup	Full DB Backup	1	Shutdown The Database				Shutdown the database from either of the command						
+			sql> shutdown normal										
+			sql> shutdown transational										
+			sql> shutdown immediate										
+		2	Copy The Control File, Data File and Redo File to Backup Location				Make a script to copy the db files to backup location						
+			cp -p	/u01/oradata/orcl/control01.ctl	/u02/bkp								
+			cp -p	/u01/oradata/orcl/control02.ctl	/u02/bkp								
+			cp -p	/u01/oradata/orcl/control03.ctl	/u02/bkp								
+			cp -p	/u01/oradata/orcl/system01.dbf	/u02/bkp								
+			cp -p	/u01/oradata/orcl/undotbs01.dbf	/u02/bkp								
+			cp -p	/u01/oradata/orcl/drsys01.dbf	/u02/bkp								
+			cp -p	/u01/oradata/orcl/indx01.dbf	/u02/bkp								
+			cp -p	/u01/oradata/orcl/tools01.dbf	/u02/bkp								
+			cp -p	/u01/oradata/orcl/users01.dbf	/u02/bkp								
+			cp -p	/u01/oradata/orcl/xdb01.dbf	/u02/bkp								
+			cp -p	/u01/oradata/orcl/redo01.log	/u02/bkp								
+			cp -p	/u01/oradata/orcl/redo02.log	/u02/bkp								
+			cp -p	/u01/oradata/orcl/redo03.log	/u02/bkp								
+			cp -p	/u01/oradata/orcl/temp01.dbf	/u02/bkp								
+		3	Start The Database				Start the database from either of the command						
+			sql> startup										
+			sql> startup nomount										
+			sql> startup mount										
+													
+Hot Backup	Tablespace Backups	1	List the Tablespace to be Backed Up										
+			SQL> select tablespace_name from dba_tablespaces;										
+			SQL> select tablespace_name, file_name from DBA_DATA_FILES;										
+		2	Check The Status Of Tablespace										
+			SQL> select file#,status from v$backup;										
+		3	Change the All Tablespace to Backup Mode										
+			alter tablespace  	SYSTEM	begin backup;								
+			alter tablespace  	UNDOTBS1	begin backup;								
+			alter tablespace  	DRSYS	begin backup;								
+			alter tablespace  	INDX	begin backup;								
+			alter tablespace  	TOOLS	begin backup;								
+			alter tablespace  	USERS	begin backup;								
+			alter tablespace  	XDB	begin backup;								
+		4	 Again Check The Status Of Tablespace After Begin Backup Mode										
+			SQL> select file#,status from v$backup;										
+		5	Copy All the Tablespace datafile  to Backup Location										
+			cp -p	/u01/oradata/orcl/system01.dbf	/u02/bkp								
+			cp -p	/u01/oradata/orcl/undotbs01.dbf	/u02/bkp								
+			cp -p	/u01/oradata/orcl/drsys01.dbf	/u02/bkp								
+			cp -p	/u01/oradata/orcl/indx01.dbf	/u02/bkp								
+			cp -p	/u01/oradata/orcl/tools01.dbf	/u02/bkp								
+			cp -p	/u01/oradata/orcl/users01.dbf	/u02/bkp								
+			cp -p	/u01/oradata/orcl/xdb01.dbf	/u02/bkp								
+		6	Change the All Tablespace to END Backup Mode										
+			alter tablespace  	SYSTEM	end backup;								
+			alter tablespace  	UNDOTBS1	end backup;								
+			alter tablespace  	DRSYS	end backup;								
+			alter tablespace  	INDX	end backup;								
+			alter tablespace  	TOOLS	end backup;								
+			alter tablespace  	USERS	end backup;								
+			alter tablespace  	XDB	end backup;								
+		7	Run The Following cmd to archive the redo being generated while Hotbackup										
+			SQL>alter system switch logfile;										
+			sql> alter system archive log current;										
+													
+Control File Backup	Binary Backup	1	sql> alter database backup controlfile to '/u02/bkp/cf.bak' REUSE;										
+													
+	Trace Backup	2	sql> alter database backup controlfile to trace;				This will create a controlfile under USER_DUMP_DEST location						
+													
+													
+Identifying DB Datafiles Location related Infomartion.													
+S.no.	File Name		Command			Description							
+1	 Datafiles	 	SQL> select file_name from dba_data_files;										
+2	 Controlfiles		SQL> select name from v$controlfile;										
+3	Redo Files		SQL> select member from v$logfile;										
+4	Temp File		SQL> select file_name from dba_temp_files;										
+5	SPFILE 		SQL> show parameter spfile;										
+6	Archive log		SQL> show parameter archive;										
+													
+7	SUM of ALL DATA FILES		SQL>  select sum(bytes)/1024/1024 from dba_data_files;				This gives the SUM of all datafiles in MB						
+8	SUM of ALL REDO LOGS		SQL> select sum(bytes)/1024/1024 from v$log;				This gives the SUM of all RDO Log Files in MB						
+													
