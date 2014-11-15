@@ -1,0 +1,59 @@
+
+REDHAT LINUX MYSQL INSTALLATION
+BY SUMIT DHAMA
+
+RHEL 6: REDHAT LINUX 6 x86-64 VERSION:
+
+ 	STEP 1: Dependencies/Prerequisites:
+
+Before start the mysql workbench or database, we need to install few rpm packages.
+          
+ 	PACKAGE 1: 
+Pexpect: from RHEL6 Server DVD or ISO (not on the RHEL6   Workstation DVD)
+Pexpect can be used for automating interactive applications such as ssh, ftp, mencoder, passwd, etc. The Pexpect interface was designed to be easy to use.
+            
+           The rpm package “pexpect-2.3-6.el6.noarch.rpm” needs to be installed 
+
+          To run this command in Linux terminal:
+
+    [root@localhost ~]# cd /media/RHEL_6.0\ x86_64\ Disc\ 1/Packages/rpm -ivh  pexpect-2.3-6.el6.noarch.rpm
+
+             Result will be displayed like this:
+
+“[root@localhost Packages]# rpm -ivh pexpect-2.3-6.el6.noarch.rpm
+warning: pexpect-2.3-6.el6.noarch.rpm: Header V3 RSA/SHA256 Signature, key ID fd431d51: NOKEY
+Preparing...    ########################################### [100%]
+   1:pexpect                ########################################### [100%] “
+
+ 	PACKAGE 2: 
+ LibZip: is a C library for reading, creating, and modifying zip archives. Files can be added from data buffers, files, or compressed data copied directly from other zip archives. Changes made without closing the archive can be reverted. The API is documented by man pages.
+
+         The rpm package “libzip-0.9-3.1.el6.x86_64.rpm” needs to be installed 
+
+
+        To run this command in Linux terminal:
+          [root@localhost Downloads]# rpm -ivh libzip-0.9-3.1.el6.x86_64.rpm
+
+STEP 2: Download MySQL Workbench: mysql-workbench-gpl-5.2.33b-1el6.x86_64.rpm
+
+The MySQL version 5.2.33 will be downloaded with user interface of workbench.
+
+Install: mysql-workbench-gpl-5.2.33b-1el6.x86_64.rpm
+To run this command in Linux terminal:
+
+[root@localhost Downloads]# rpm -ivh mysql-workbench-gpl-5.2.33b-1el6.x86_64.rpm
+Result will be displayed like this:
+
+“[root@localhost Downloads]# rpm -ivh mysql-workbench-gpl-5.2.33b-1el6.x86_64.rpm
+Preparing...                ########################################### [100%]
+   1:mysql-workbench-gpl    ########################################### [100%]”
+Start: 
+Now start the workbench using shell command. Using the below command we can see all option of mysql workbench.
+[user@localhost ~]$ /usr/bin/mysql-workbench –help
+ 
+
+
+[user@localhost ~]$ /usr/bin/mysql-workbench admin
+ 
+ 
+there you go!
